@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Oliver CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=DM+Mono:wght@400;500&family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0c0c0f;
+  --surface: #13131a;
+  --card: #1a1a24;
+  --card2: #1f1f2e;
+  --border: #2a2a3a;
+  --amber: #ffb020;
+  --red: #ff3b1f;
+  --green: #22c55e;
+  --blue: #3b82f6;
+  --text: #f0eee8;
+  --muted: #6b6b80;
+  --muted2: #4a4a5a;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-size:14px;display:flex;flex-direction:column;}
+
+/* ── TOP BAR ── */
+.topbar {
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 16px;height:54px;display:flex;align-items:center;
+  justify-content:space-between;flex-shrink:0;
+}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.brand{font-family:'Abril Fatface',serif;font-size:18px;color:var(--amber);text-shadow:0 0 16px rgba(255,176,32,0.3);}
+.topbar-title{font-size:14px;color:var(--muted);margin-left:4px;}
+.topbar-actions{display:flex;gap:6px;}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;padding:16px;padding-bottom:80px;}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--border);
+  display:flex;z-index:100;height:58px;
+}
+.bnav-item {
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;cursor:pointer;
+  color:var(--muted);transition:color 0.15s;padding:6px 4px;
+  border:none;background:none;font-family:'Rubik',sans-serif;
+}
+.bnav-item.active{color:var(--amber);}
+.bnav-icon{font-size:18px;line-height:1;}
+.bnav-label{font-size:10px;letter-spacing:0.5px;text-transform:uppercase;}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── BUTTONS ── */
+.btn{padding:8px 14px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Rubik',sans-serif;transition:all 0.15s;}
+.btn-amber{background:var(--amber);color:#0c0c0f;}
+.btn-amber:hover{opacity:0.88;}
+.btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.btn-outline:hover{color:var(--text);border-color:var(--text);}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 10px;font-size:10px;border-radius:3px;cursor:pointer;transition:all 0.15s;font-family:'Rubik',sans-serif;}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
+.btn-sm{padding:6px 12px;font-size:10px;}
+
+/* ── STAT CARDS ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px 16px;}
+.stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.stat-value{font-family:'Abril Fatface',serif;font-size:30px;line-height:1;}
+.stat-value.amber{color:var(--amber);}
+.stat-value.green{color:var(--green);}
+.stat-value.red{color:var(--red);}
+.stat-value.blue{color:var(--blue);}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.card-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.card-title{font-family:'Abril Fatface',serif;font-size:16px;}
+
+/* ── ACTIVITY ── */
+.activity-item{display:flex;align-items:flex-start;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(42,42,58,0.5);}
+.activity-item:last-child{border-bottom:none;}
+.activity-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.activity-text{font-size:12px;color:var(--muted);flex:1;line-height:1.5;}
+.activity-text strong{color:var(--text);}
+.activity-time{font-size:10px;color:var(--muted2);font-family:'DM Mono',monospace;white-space:nowrap;margin-top:2px;}
+
+/* ── TOP BUYERS ── */
+.top-buyer-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(42,42,58,0.5);}
+.top-buyer-row:last-child{border-bottom:none;}
+.top-buyer-rank{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted2);width:18px;text-align:center;flex-shrink:0;}
+.buyer-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff;}
+.top-buyer-info{flex:1;min-width:0;}
+.top-buyer-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.top-buyer-shows{font-size:10px;color:var(--muted);}
+.top-buyer-spent{font-family:'DM Mono',monospace;font-size:13px;color:var(--green);flex-shrink:0;}
+
+/* ── AUDIENCE ── */
+.search-row{display:flex;gap:8px;margin-bottom:12px;}
+.search-input{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:4px;font-size:13px;font-family:'Rubik',sans-serif;outline:none;transition:border-color 0.15s;}
+.search-input:focus{border-color:var(--amber);}
+.search-input::placeholder{color:var(--muted);}
+.filter-sel{background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 10px;border-radius:4px;font-size:12px;font-family:'Rubik',sans-serif;outline:none;-webkit-appearance:none;cursor:pointer;}
+.filter-sel:focus{border-color:var(--amber);}
+
+.buyer-row{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
+.buyer-info{flex:1;min-width:0;}
+.buyer-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+.buyer-email{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.buyer-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center;}
+.show-tag{display:inline-block;padding:2px 8px;background:rgba(255,176,32,0.1);border:1px solid rgba(255,176,32,0.2);border-radius:20px;font-size:10px;color:var(--amber);}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.badge-green{background:rgba(34,197,94,0.15);color:var(--green);}
+.badge-amber{background:rgba(255,176,32,0.15);color:var(--amber);}
+.buyer-spent{font-family:'DM Mono',monospace;font-size:12px;color:var(--green);}
+
+/* ── SHOWS ── */
+.show-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px;}
+.show-card:hover{border-color:rgba(255,176,32,0.25);}
+.show-card-top{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.show-date-wrap{display:flex;align-items:baseline;gap:6px;}
+.show-date-big{font-family:'Abril Fatface',serif;font-size:26px;color:var(--amber);line-height:1;}
+.show-date-month{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.show-card-body{padding:12px 16px;}
+.show-name{font-family:'Abril Fatface',serif;font-size:16px;margin-bottom:3px;}
+.show-venue{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.show-stats-row{display:flex;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.show-stat{flex:1;text-align:center;padding:8px 4px;border-right:1px solid var(--border);}
+.show-stat:last-child{border-right:none;}
+.show-stat-num{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;}
+.show-stat-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.cap-bar{height:4px;background:var(--border);border-radius:2px;margin-top:10px;}
+.cap-fill{height:4px;border-radius:2px;background:var(--amber);transition:width 0.4s;}
+.show-card-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+
+/* ── EMAIL BLAST ── */
+.blast-section{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.blast-head{padding:14px 16px;border-bottom:1px solid var(--border);}
+.blast-head-title{font-family:'Abril Fatface',serif;font-size:16px;}
+.blast-head-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.blast-body-inner{padding:16px;}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.chip{padding:5px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.chip.selected{background:rgba(255,176,32,0.15);border-color:var(--amber);color:var(--amber);}
+.recipient-count{font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);margin-bottom:14px;}
+.preview-box{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;margin-top:14px;}
+.preview-from{font-size:10px;color:var(--muted2);margin-bottom:3px;}
+.preview-subject{font-family:'Abril Fatface',serif;font-size:15px;color:var(--text);margin-bottom:8px;}
+.preview-text{font-size:12px;color:var(--muted);line-height:1.6;white-space:pre-wrap;}
+
+/* ── FORM ── */
+.form-group{margin-bottom:13px;}
+.form-label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 13px;border-radius:4px;font-size:13px;font-family:'Rubik',sans-serif;outline:none;transition:border-color 0.15s;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--amber);}
+.form-textarea{height:90px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px 12px 0 0;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform 0.25s;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:1;}
+.modal-title{font-family:'Abril Fatface',serif;font-size:19px;}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 8px;}
+.modal-body{padding:20px;}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;position:sticky;bottom:0;background:var(--card);}
+.modal-footer .btn{flex:1;text-align:center;padding:12px;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--green);color:var(--green);padding:10px 20px;border-radius:24px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.3s;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-icon{font-size:32px;margin-bottom:10px;}
+.empty-text{font-size:13px;}
+
+/* ── FAB ── */
+.fab-row{display:flex;gap:8px;margin-bottom:16px;}
+.fab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);font-family:'Rubik',sans-serif;transition:all 0.15s;}
+.fab.amber{background:rgba(255,176,32,0.1);border-color:rgba(255,176,32,0.3);color:var(--amber);}
+.fab.blue{background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);color:var(--blue);}
+
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="brand">Oliver CRM</span>
+  </div>
+  <div class="topbar-actions" id="topbar-actions">
+    <button class="btn btn-outline btn-sm" id="add-show-btn">+ Show</button>
+    <button class="btn btn-amber btn-sm" id="add-buyer-btn">+ Buyer</button>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Buyers</div><div class="stat-value amber" id="stat-buyers">0</div><div class="stat-sub">in your list</div></div>
+      <div class="stat-card"><div class="stat-label">Shows</div><div class="stat-value blue" id="stat-shows">0</div><div class="stat-sub">total events</div></div>
+      <div class="stat-card"><div class="stat-label">Tickets Sold</div><div class="stat-value green" id="stat-tickets">0</div><div class="stat-sub">across all shows</div></div>
+      <div class="stat-card"><div class="stat-label">Repeat Buyers</div><div class="stat-value red" id="stat-repeat">0</div><div class="stat-sub">came back 2+ times</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Top Spenders</div></div>
+      <div id="top-buyers-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Recent Activity</div></div>
+      <div id="activity-list"></div>
+    </div>
+  </div>
+
+  <!-- AUDIENCE -->
+  <div class="page" id="page-audience">
+    <div class="search-row">
+      <input class="search-input" type="text" id="buyer-search" placeholder="Search name or email..."/>
+      <select class="filter-sel" id="buyer-filter">
+        <option value="all">All</option>
+        <option value="repeat">Repeat</option>
+        <option value="new">New</option>
+      </select>
+    </div>
+    <div id="buyer-list"></div>
+  </div>
+
+  <!-- SHOWS -->
+  <div class="page" id="page-shows">
+    <div id="shows-list"></div>
+  </div>
+
+  <!-- EMAIL BLAST -->
+  <div class="page" id="page-blast">
+    <div class="blast-section">
+      <div class="blast-head"><div class="blast-head-title">Compose Blast</div><div class="blast-head-sub">Send to your audience</div></div>
+      <div class="blast-body-inner">
+        <div class="form-group">
+          <div class="form-label">Send To</div>
+          <div class="chip-row" id="recipient-chips"></div>
+          <div class="recipient-count" id="recipient-count"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Subject</label><input class="form-input" id="blast-subject" type="text" placeholder="Casey Rocket is coming to STL!"/></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="blast-body" placeholder="Hey [first name],&#10;&#10;Just wanted to let you know..."></textarea></div>
+        <div class="preview-box">
+          <div class="preview-from">From: Chris Oliver &lt;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="12717a607b6152667d627a7d7e7d756b3c717d7f">[email&#160;protected]</a>&gt;</div>
+          <div class="preview-subject" id="preview-subject">Your subject will appear here</div>
+          <div class="preview-text" id="preview-body">Your message will appear here as you type...</div>
+        </div>
+        <button class="btn btn-amber" id="send-blast-btn" style="width:100%;text-align:center;padding:13px;margin-top:14px;">Send Email Blast</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-item active" data-page="dashboard"><span class="bnav-icon">📊</span><span class="bnav-label">Dashboard</span></button>
+  <button class="bnav-item" data-page="audience"><span class="bnav-icon">👥</span><span class="bnav-label">Audience</span></button>
+  <button class="bnav-item" data-page="shows"><span class="bnav-icon">🎤</span><span class="bnav-label">Shows</span></button>
+  <button class="bnav-item" data-page="blast"><span class="bnav-icon">📣</span><span class="bnav-label">Blast</span></button>
+</nav>
+
+<!-- ADD BUYER MODAL -->
+<div class="modal-overlay" id="buyer-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Buyer</div><button class="modal-close" data-close="buyer-modal">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="b-first" type="text" placeholder="Jordan"/></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="b-last" type="text" placeholder="Smith"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="b-email" type="email" placeholder="jordan@email.com"/></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="b-phone" type="tel" placeholder="314-555-0100"/></div>
+      <div class="form-group"><label class="form-label">Show Attended</label><select class="form-select" id="b-show"><option value="">-- Select show --</option></select></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Tickets</label><input class="form-input" id="b-tickets" type="number" min="1" value="1"/></div>
+        <div class="form-group"><label class="form-label">Paid ($)</label><input class="form-input" id="b-amount" type="number" min="0" value="20"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="b-notes" placeholder="e.g. Brought 4 friends, VIP..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" data-close="buyer-modal">Cancel</button><button class="btn btn-amber" id="save-buyer-btn">Save Buyer</button></div>
+  </div>
+</div>
+
+<!-- ADD SHOW MODAL -->
+<div class="modal-overlay" id="show-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Show</div><button class="modal-close" data-close="show-modal">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Show Name</label><input class="form-input" id="s-name" type="text" placeholder="Best of the Midwest Vol. 2"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="s-date" type="date"/></div>
+        <div class="form-group"><label class="form-label">Time</label><input class="form-input" id="s-time" type="text" placeholder="10:30 PM"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Venue</label><input class="form-input" id="s-venue" type="text" placeholder="St. Charles Funny Bone"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Price ($)</label><input class="form-input" id="s-price" type="number" min="0" value="20"/></div>
+        <div class="form-group"><label class="form-label">Capacity</label><input class="form-input" id="s-cap" type="number" min="1" value="100"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Headliners</label><input class="form-input" id="s-headliner" type="text" placeholder="Casey Rocket, Bri Munnich..."/></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" data-close="show-modal">Cancel</button><button class="btn btn-amber" id="save-show-btn">Save Show</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── DATA ──────────────────────────────────────────────
+var shows = [
+  {id:1,name:"Best of the Midwest & Beyond",date:"2025-04-25",time:"10:30 PM",venue:"St. Charles Funny Bone",price:20,capacity:200,headliners:"Casey Rocket, Bri Munnich, Alex Hayes"},
+  {id:2,name:"Delta Comedy Night",date:"2025-03-08",time:"8:00 PM",venue:"The Delta STL",price:15,capacity:80,headliners:"Chris Oliver, Jim Stout"},
+  {id:3,name:"Common Courtesy Live",date:"2025-02-14",time:"9:00 PM",venue:"Zanies St. Louis",price:25,capacity:120,headliners:"Eric Kuessler, Chris Oliver"},
+  {id:4,name:"Streets of STL Showcase",date:"2025-01-18",time:"8:30 PM",venue:"W&P Brewing",price:10,capacity:60,headliners:"Local Showcase"},
+];
+var buyers = [
+  {id:1,first:"Marcus",last:"Williams",email:"marcus.w@gmail.com",phone:"314-555-0101",shows:[1,2,3],tickets:[2,1,2],amounts:[40,15,50],notes:"Front row regular",color:"#ff3b1f"},
+  {id:2,first:"Destiny",last:"Johnson",email:"destiny.j@yahoo.com",phone:"314-555-0202",shows:[1,3],tickets:[2,2],amounts:[40,50],notes:"",color:"#3b82f6"},
+  {id:3,first:"Ray",last:"Delgado",email:"ray.d@hotmail.com",phone:"618-555-0303",shows:[2,4],tickets:[1,1],amounts:[15,10],notes:"Came from IL",color:"#22c55e"},
+  {id:4,first:"Tasha",last:"Moore",email:"tasha.moore@gmail.com",phone:"314-555-0404",shows:[1],tickets:[4],amounts:[80],notes:"Brought whole group",color:"#e879f9"},
+  {id:5,first:"Kevin",last:"Park",email:"kpark@outlook.com",phone:"314-555-0505",shows:[3,4],tickets:[1,1],amounts:[25,10],notes:"",color:"#ffb020"},
+  {id:6,first:"Alicia",last:"Torres",email:"alicia.t@gmail.com",phone:"314-555-0606",shows:[1,2,3,4],tickets:[1,2,1,1],amounts:[20,30,25,10],notes:"Super fan — every show",color:"#f97316"},
+  {id:7,first:"Brandon",last:"Lee",email:"b.lee@gmail.com",phone:"314-555-0707",shows:[2],tickets:[2],amounts:[30],notes:"",color:"#06b6d4"},
+  {id:8,first:"Simone",last:"Davis",email:"simone.d@gmail.com",phone:"314-555-0808",shows:[1,4],tickets:[1,1],amounts:[20,10],notes:"Found via IG",color:"#a78bfa"},
+];
+var nextBuyerId=9, nextShowId=5;
+var selectedRecipients=new Set(['all']);
+var activities=[
+  {text:'<strong>Alicia Torres</strong> purchased 1 ticket to Best of the Midwest',time:'2h ago',dot:'#22c55e'},
+  {text:'<strong>Marcus Williams</strong> bought 2 tickets — Common Courtesy Live',time:'1d ago',dot:'#22c55e'},
+  {text:'New show <strong>Best of the Midwest & Beyond</strong> created',time:'2d ago',dot:'#3b82f6'},
+  {text:'<strong>Tasha Moore</strong> group purchase — 4 tickets',time:'3d ago',dot:'#ffb020'},
+  {text:'Email blast sent to <strong>8 recipients</strong>',time:'1wk ago',dot:'#e879f9'},
+];
+
+// ── LOCALSTORAGE ──────────────────────────────────────
+var SEED_DONE_KEY = 'olivercrm_seeded_v1';
+
+function saveData(){
+  try {
+    localStorage.setItem('olivercrm_shows', JSON.stringify(shows));
+    localStorage.setItem('olivercrm_buyers', JSON.stringify(buyers));
+    localStorage.setItem('olivercrm_activities', JSON.stringify(activities));
+    localStorage.setItem('olivercrm_nextBuyerId', nextBuyerId);
+    localStorage.setItem('olivercrm_nextShowId', nextShowId);
+    localStorage.setItem(SEED_DONE_KEY, '1');
+  } catch(e) {}
+}
+
+function loadData(){
+  try {
+    // Only load from storage if we've saved before — otherwise use sample data
+    if(!localStorage.getItem(SEED_DONE_KEY)) return;
+    var s = localStorage.getItem('olivercrm_shows');
+    var b = localStorage.getItem('olivercrm_buyers');
+    var a = localStorage.getItem('olivercrm_activities');
+    if(s) shows = JSON.parse(s);
+    if(b) buyers = JSON.parse(b);
+    if(a) activities = JSON.parse(a);
+    nextBuyerId = parseInt(localStorage.getItem('olivercrm_nextBuyerId'))||nextBuyerId;
+    nextShowId = parseInt(localStorage.getItem('olivercrm_nextShowId'))||nextShowId;
+  } catch(e) {}
+}
+
+// ── HELPERS ───────────────────────────────────────────
+function totalTickets(b){return b.tickets.reduce(function(a,c){return a+c;},0);}
+function totalSpent(b){return b.amounts.reduce(function(a,c){return a+c;},0);}
+function isRepeat(b){return b.shows.length>=2;}
+function showById(id){return shows.find(function(s){return s.id===id;});}
+function formatDate(d){var p=d.split('-');var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[parseInt(p[1])-1]+' '+parseInt(p[2]);}
+function getInitials(b){return (b.first[0]+(b.last[0]||'')).toUpperCase();}
+function avatar(b){return '<div class="buyer-avatar" style="background:'+b.color+'">'+getInitials(b)+'</div>';}
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+
+// ── NAVIGATION ────────────────────────────────────────
+document.querySelectorAll('.bnav-item').forEach(function(item){
+  item.addEventListener('click',function(){
+    var page=this.getAttribute('data-page');
+    document.querySelectorAll('.bnav-item').forEach(function(n){n.classList.remove('active');});
+    this.classList.add('active');
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+    document.getElementById('page-'+page).classList.add('active');
+    if(page==='dashboard') renderDashboard();
+    if(page==='audience') renderAudience();
+    if(page==='shows') renderShows();
+    if(page==='blast') renderBlast();
+  });
+});
+
+// ── MODALS ────────────────────────────────────────────
+document.getElementById('add-buyer-btn').addEventListener('click',function(){
+  var sel=document.getElementById('b-show');
+  sel.innerHTML='<option value="">-- Select show --</option>';
+  shows.forEach(function(s){sel.innerHTML+='<option value="'+s.id+'">'+s.name.slice(0,30)+' ('+formatDate(s.date)+')</option>';});
+  document.getElementById('buyer-modal').classList.add('open');
+});
+document.getElementById('add-show-btn').addEventListener('click',function(){
+  document.getElementById('show-modal').classList.add('open');
+});
+document.querySelectorAll('[data-close]').forEach(function(el){
+  el.addEventListener('click',function(){document.getElementById(this.getAttribute('data-close')).classList.remove('open');});
+});
+document.querySelectorAll('.modal-overlay').forEach(function(o){
+  o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+});
+
+// ── SAVE BUYER ────────────────────────────────────────
+document.getElementById('save-buyer-btn').addEventListener('click',function(){
+  var first=document.getElementById('b-first').value.trim();
+  var last=document.getElementById('b-last').value.trim();
+  var email=document.getElementById('b-email').value.trim();
+  if(!first||!email){showToast('Name and email required');return;}
+  var sid=parseInt(document.getElementById('b-show').value)||null;
+  var tix=parseInt(document.getElementById('b-tickets').value)||1;
+  var amt=parseFloat(document.getElementById('b-amount').value)||0;
+  var colors=['#ff3b1f','#3b82f6','#22c55e','#e879f9','#ffb020','#f97316','#06b6d4','#a78bfa'];
+  buyers.push({id:nextBuyerId++,first:first,last:last,email:email,phone:document.getElementById('b-phone').value.trim(),shows:sid?[sid]:[],tickets:sid?[tix]:[],amounts:sid?[amt]:[],notes:document.getElementById('b-notes').value.trim(),color:colors[buyers.length%colors.length]});
+  activities.unshift({text:'<strong>'+first+' '+last+'</strong> added to audience',time:'Just now',dot:'#22c55e'});
+  document.getElementById('buyer-modal').classList.remove('open');
+  ['b-first','b-last','b-email','b-phone','b-notes'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('b-tickets').value='1';document.getElementById('b-amount').value='20';
+  saveData();
+  showToast('✓ '+first+' '+last+' added');
+  renderDashboard();
+  if(document.getElementById('page-audience').classList.contains('active'))renderAudience();
+});
+
+// ── SAVE SHOW ─────────────────────────────────────────
+document.getElementById('save-show-btn').addEventListener('click',function(){
+  var name=document.getElementById('s-name').value.trim();
+  var date=document.getElementById('s-date').value;
+  var venue=document.getElementById('s-venue').value.trim();
+  if(!name||!date||!venue){showToast('Name, date and venue required');return;}
+  shows.unshift({id:nextShowId++,name:name,date:date,time:document.getElementById('s-time').value||'TBD',venue:venue,price:parseFloat(document.getElementById('s-price').value)||0,capacity:parseInt(document.getElementById('s-cap').value)||100,headliners:document.getElementById('s-headliner').value.trim()});
+  activities.unshift({text:'New show <strong>'+name+'</strong> added',time:'Just now',dot:'#3b82f6'});
+  document.getElementById('show-modal').classList.remove('open');
+  ['s-name','s-date','s-time','s-venue','s-headliner'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('s-price').value='20';document.getElementById('s-cap').value='100';
+  saveData();
+  showToast('✓ Show added');
+  renderDashboard();
+  if(document.getElementById('page-shows').classList.contains('active'))renderShows();
+});
+
+// ── DASHBOARD ─────────────────────────────────────────
+function renderDashboard(){
+  document.getElementById('stat-buyers').textContent=buyers.length;
+  document.getElementById('stat-shows').textContent=shows.length;
+  document.getElementById('stat-tickets').textContent=buyers.reduce(function(a,b){return a+totalTickets(b);},0);
+  document.getElementById('stat-repeat').textContent=buyers.filter(isRepeat).length;
+  var sorted=buyers.slice().sort(function(a,b){return totalSpent(b)-totalSpent(a);}).slice(0,5);
+  document.getElementById('top-buyers-list').innerHTML=sorted.map(function(b,i){
+    return '<div class="top-buyer-row"><div class="top-buyer-rank">'+(i+1)+'</div>'+avatar(b)+'<div class="top-buyer-info"><div class="top-buyer-name">'+b.first+' '+b.last+'</div><div class="top-buyer-shows">'+b.shows.length+' show'+(b.shows.length!==1?'s':'')+'</div></div><div class="top-buyer-spent">$'+totalSpent(b)+'</div></div>';
+  }).join('');
+  document.getElementById('activity-list').innerHTML=activities.slice(0,5).map(function(a){
+    return '<div class="activity-item"><div class="activity-dot" style="background:'+a.dot+'"></div><div class="activity-text">'+a.text+'</div><div class="activity-time">'+a.time+'</div></div>';
+  }).join('');
+}
+
+// ── AUDIENCE ──────────────────────────────────────────
+function renderAudience(){
+  var search=(document.getElementById('buyer-search').value||'').toLowerCase();
+  var filter=document.getElementById('buyer-filter').value;
+  var list=buyers.filter(function(b){
+    var match=(b.first+' '+b.last+' '+b.email).toLowerCase().includes(search);
+    if(!match)return false;
+    if(filter==='repeat')return isRepeat(b);
+    if(filter==='new')return !isRepeat(b);
+    return true;
+  });
+  var el=document.getElementById('buyer-list');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">No buyers found</div></div>';return;}
+  el.innerHTML=list.map(function(b){
+    var showTags=b.shows.map(function(sid){var s=showById(sid);return s?'<span class="show-tag">'+s.name.split(' ').slice(0,3).join(' ')+'</span>':'';}).join('');
+    var badge=isRepeat(b)?'<span class="badge badge-green">Repeat</span>':'<span class="badge badge-amber">New</span>';
+    return '<div class="buyer-row">'+avatar(b)+'<div class="buyer-info"><div class="buyer-name">'+b.first+' '+b.last+'</div><div class="buyer-email">'+b.email+'</div><div class="buyer-meta">'+badge+'<span class="buyer-spent">$'+totalSpent(b)+'</span>'+showTags+(b.notes?'<span style="font-size:10px;color:var(--muted);">'+b.notes.slice(0,35)+'</span>':'')+'</div></div><button class="btn-ghost" style="margin-left:auto;flex-shrink:0;" data-del-buyer="'+b.id+'">✕</button></div>';
+  }).join('');
+  document.querySelectorAll('[data-del-buyer]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var id=parseInt(this.getAttribute('data-del-buyer'));
+      buyers=buyers.filter(function(b){return b.id!==id;});
+      saveData();
+      showToast('Buyer removed');renderAudience();renderDashboard();
+    });
+  });
+}
+document.getElementById('buyer-search').addEventListener('input',function(){if(document.getElementById('page-audience').classList.contains('active'))renderAudience();});
+document.getElementById('buyer-filter').addEventListener('change',function(){if(document.getElementById('page-audience').classList.contains('active'))renderAudience();});
+
+// ── SHOWS ─────────────────────────────────────────────
+function renderShows(){
+  var el=document.getElementById('shows-list');
+  if(!shows.length){el.innerHTML='<div class="empty"><div class="empty-icon">🎤</div><div class="empty-text">No shows yet</div></div>';return;}
+  el.innerHTML=shows.map(function(s){
+    var attendees=buyers.filter(function(b){return b.shows.includes(s.id);});
+    var revenue=attendees.reduce(function(acc,b){var i=b.shows.indexOf(s.id);return acc+(i>=0?b.amounts[i]:0);},0);
+    var sold=attendees.reduce(function(acc,b){var i=b.shows.indexOf(s.id);return acc+(i>=0?b.tickets[i]:0);},0);
+    var pct=Math.min(100,Math.round(sold/s.capacity*100));
+    var isPast=new Date(s.date)<new Date();
+    var badge=isPast?'<span class="badge" style="background:rgba(107,107,128,0.15);color:var(--muted);">Past</span>':'<span class="badge badge-green">Upcoming</span>';
+    var dp=formatDate(s.date).split(' ');
+    return '<div class="show-card"><div class="show-card-top"><div class="show-date-wrap"><div class="show-date-big">'+dp[1]+'</div><div class="show-date-month">'+dp[0]+'</div></div>'+badge+'</div><div class="show-card-body"><div class="show-name">'+s.name+'</div><div class="show-venue">📍 '+s.venue+' · '+s.time+'</div>'+(s.headliners?'<div style="font-size:11px;color:var(--muted);margin-bottom:8px;">🎤 '+s.headliners+'</div>':'')+
+    '<div class="show-stats-row"><div class="show-stat"><div class="show-stat-num" style="color:var(--amber);">'+sold+'</div><div class="show-stat-lbl">Sold</div></div><div class="show-stat"><div class="show-stat-num" style="color:var(--muted);">'+s.capacity+'</div><div class="show-stat-lbl">Cap</div></div><div class="show-stat"><div class="show-stat-num" style="color:var(--green);">$'+revenue+'</div><div class="show-stat-lbl">Revenue</div></div><div class="show-stat"><div class="show-stat-num" style="color:var(--blue);">'+attendees.length+'</div><div class="show-stat-lbl">Buyers</div></div></div>'+
+    '<div class="cap-bar"><div class="cap-fill" style="width:'+pct+'%"></div></div><div style="font-size:10px;color:var(--muted);margin-top:4px;">'+pct+'% capacity · $'+s.price+'/ticket</div></div>'+
+    '<div class="show-card-footer"><span style="font-size:11px;color:var(--muted2);">#'+s.id+'</span><button class="btn-ghost" data-del-show="'+s.id+'">Remove</button></div></div>';
+  }).join('');
+  document.querySelectorAll('[data-del-show]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var id=parseInt(this.getAttribute('data-del-show'));
+      shows=shows.filter(function(s){return s.id!==id;});
+      saveData();
+      showToast('Show removed');renderShows();renderDashboard();
+    });
+  });
+}
+
+// ── EMAIL BLAST ───────────────────────────────────────
+function getRecipients(){
+  if(selectedRecipients.has('all'))return buyers;
+  var result=new Set();
+  selectedRecipients.forEach(function(key){
+    if(key==='repeat')buyers.filter(isRepeat).forEach(function(b){result.add(b);});
+    else if(key==='new')buyers.filter(function(b){return !isRepeat(b);}).forEach(function(b){result.add(b);});
+    else if(key.startsWith('show_')){var sid=parseInt(key.replace('show_',''));buyers.filter(function(b){return b.shows.includes(sid);}).forEach(function(b){result.add(b);});}
+  });
+  return Array.from(result);
+}
+
+function renderBlast(){
+  var opts=[{key:'all',label:'All Buyers'},{key:'repeat',label:'Repeat'},{key:'new',label:'First-Timers'}];
+  shows.slice(0,4).forEach(function(s){opts.push({key:'show_'+s.id,label:s.name.split(' ').slice(0,3).join(' ')});});
+  document.getElementById('recipient-chips').innerHTML=opts.map(function(o){
+    return '<div class="chip'+(selectedRecipients.has(o.key)?' selected':'')+'" data-key="'+o.key+'">'+o.label+'</div>';
+  }).join('');
+  document.querySelectorAll('.chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var key=this.getAttribute('data-key');
+      if(key==='all'){selectedRecipients.clear();selectedRecipients.add('all');}
+      else{selectedRecipients.delete('all');if(selectedRecipients.has(key))selectedRecipients.delete(key);else selectedRecipients.add(key);if(selectedRecipients.size===0)selectedRecipients.add('all');}
+      renderBlast();
+    });
+  });
+  var n=getRecipients().length;
+  document.getElementById('recipient-count').textContent='→ Sending to '+n+' recipient'+(n!==1?'s':'');
+}
+
+document.getElementById('blast-subject').addEventListener('input',function(){document.getElementById('preview-subject').textContent=this.value||'Your subject will appear here';});
+document.getElementById('blast-body').addEventListener('input',function(){document.getElementById('preview-body').textContent=this.value||'Your message will appear here as you type...';});
+document.getElementById('send-blast-btn').addEventListener('click',function(){
+  var subj=document.getElementById('blast-subject').value.trim();
+  var body=document.getElementById('blast-body').value.trim();
+  if(!subj||!body){showToast('Subject and message required');return;}
+  var n=getRecipients().length;
+  activities.unshift({text:'Email blast <strong>"'+subj.slice(0,28)+(subj.length>28?'...':'')+'"</strong> sent to '+n+' recipients',time:'Just now',dot:'#e879f9'});
+  saveData();
+  showToast('✓ Blast sent to '+n+' recipients');
+  document.getElementById('blast-subject').value='';
+  document.getElementById('blast-body').value='';
+  document.getElementById('preview-subject').textContent='Your subject will appear here';
+  document.getElementById('preview-body').textContent='Your message will appear here as you type...';
+  selectedRecipients.clear();selectedRecipients.add('all');
+  renderBlast();
+});
+
+// ── INIT ──────────────────────────────────────────────
+loadData();
+renderDashboard();
+</script>
+</body>
+</html>
