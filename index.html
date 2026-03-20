@@ -4,87 +4,49 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Oliver CRM</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=DM+Mono:wght@400;500&family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #0c0c0f;
-  --surface: #13131a;
-  --card: #1a1a24;
-  --card2: #1f1f2e;
-  --border: #2a2a3a;
-  --amber: #ffb020;
-  --red: #ff3b1f;
-  --green: #22c55e;
-  --blue: #3b82f6;
-  --text: #f0eee8;
-  --muted: #6b6b80;
-  --muted2: #4a4a5a;
-}
+:root{--bg:#0c0c0f;--surface:#13131a;--card:#1a1a24;--card2:#1f1f2e;--border:#2a2a3a;--amber:#ffb020;--red:#ff3b1f;--green:#22c55e;--blue:#3b82f6;--text:#f0eee8;--muted:#6b6b80;--muted2:#4a4a5a;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;}
 body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-size:14px;display:flex;flex-direction:column;}
 
-/* ── TOP BAR ── */
-.topbar {
-  background:var(--surface);border-bottom:1px solid var(--border);
-  padding:0 16px;height:54px;display:flex;align-items:center;
-  justify-content:space-between;flex-shrink:0;
-}
-.topbar-left{display:flex;align-items:center;gap:10px;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .brand{font-family:'Abril Fatface',serif;font-size:18px;color:var(--amber);text-shadow:0 0 16px rgba(255,176,32,0.3);}
-.topbar-title{font-size:14px;color:var(--muted);margin-left:4px;}
-.topbar-actions{display:flex;gap:6px;}
+.topbar-actions{display:flex;gap:6px;align-items:center;}
 
-/* ── CONTENT ── */
 .content{flex:1;overflow-y:auto;padding:16px;padding-bottom:80px;}
 
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-  position:fixed;bottom:0;left:0;right:0;
-  background:var(--surface);border-top:1px solid var(--border);
-  display:flex;z-index:100;height:58px;
-}
-.bnav-item {
-  flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:3px;cursor:pointer;
-  color:var(--muted);transition:color 0.15s;padding:6px 4px;
-  border:none;background:none;font-family:'Rubik',sans-serif;
-}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;height:58px;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--muted);transition:color 0.15s;padding:6px 4px;border:none;background:none;font-family:'Rubik',sans-serif;}
 .bnav-item.active{color:var(--amber);}
 .bnav-icon{font-size:18px;line-height:1;}
 .bnav-label{font-size:10px;letter-spacing:0.5px;text-transform:uppercase;}
 
-/* ── PAGES ── */
-.page{display:none;}
-.page.active{display:block;}
+.page{display:none;}.page.active{display:block;}
 
-/* ── BUTTONS ── */
 .btn{padding:8px 14px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Rubik',sans-serif;transition:all 0.15s;}
-.btn-amber{background:var(--amber);color:#0c0c0f;}
-.btn-amber:hover{opacity:0.88;}
-.btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border);}
-.btn-outline:hover{color:var(--text);border-color:var(--text);}
+.btn-amber{background:var(--amber);color:#0c0c0f;}.btn-amber:hover{opacity:0.88;}
+.btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border);}.btn-outline:hover{color:var(--text);border-color:var(--text);}
+.btn-green{background:var(--green);color:#fff;}.btn-green:hover{opacity:0.88;}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 10px;font-size:10px;border-radius:3px;cursor:pointer;transition:all 0.15s;font-family:'Rubik',sans-serif;}
 .btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
 .btn-sm{padding:6px 12px;font-size:10px;}
+.btn-icon{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 10px;font-size:14px;border-radius:4px;cursor:pointer;transition:all 0.15s;}
+.btn-icon:hover{border-color:var(--amber);color:var(--amber);}
 
-/* ── STAT CARDS ── */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px 16px;}
 .stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
 .stat-value{font-family:'Abril Fatface',serif;font-size:30px;line-height:1;}
-.stat-value.amber{color:var(--amber);}
-.stat-value.green{color:var(--green);}
-.stat-value.red{color:var(--red);}
-.stat-value.blue{color:var(--blue);}
+.stat-value.amber{color:var(--amber);}.stat-value.green{color:var(--green);}.stat-value.red{color:var(--red);}.stat-value.blue{color:var(--blue);}
 .stat-sub{font-size:10px;color:var(--muted);margin-top:3px;}
 
-/* ── CARDS ── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px;}
 .card-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .card-title{font-family:'Abril Fatface',serif;font-size:16px;}
 
-/* ── ACTIVITY ── */
 .activity-item{display:flex;align-items:flex-start;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(42,42,58,0.5);}
 .activity-item:last-child{border-bottom:none;}
 .activity-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
@@ -92,7 +54,6 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 .activity-text strong{color:var(--text);}
 .activity-time{font-size:10px;color:var(--muted2);font-family:'DM Mono',monospace;white-space:nowrap;margin-top:2px;}
 
-/* ── TOP BUYERS ── */
 .top-buyer-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(42,42,58,0.5);}
 .top-buyer-row:last-child{border-bottom:none;}
 .top-buyer-rank{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted2);width:18px;text-align:center;flex-shrink:0;}
@@ -102,13 +63,14 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 .top-buyer-shows{font-size:10px;color:var(--muted);}
 .top-buyer-spent{font-family:'DM Mono',monospace;font-size:13px;color:var(--green);flex-shrink:0;}
 
-/* ── AUDIENCE ── */
-.search-row{display:flex;gap:8px;margin-bottom:12px;}
-.search-input{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:4px;font-size:13px;font-family:'Rubik',sans-serif;outline:none;transition:border-color 0.15s;}
+/* AUDIENCE TOOLBAR */
+.audience-toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.search-input{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:4px;font-size:13px;font-family:'Rubik',sans-serif;outline:none;transition:border-color 0.15s;}
 .search-input:focus{border-color:var(--amber);}
 .search-input::placeholder{color:var(--muted);}
 .filter-sel{background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 10px;border-radius:4px;font-size:12px;font-family:'Rubik',sans-serif;outline:none;-webkit-appearance:none;cursor:pointer;}
 .filter-sel:focus{border-color:var(--amber);}
+.csv-actions{display:flex;gap:6px;}
 
 .buyer-row{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
 .buyer-info{flex:1;min-width:0;}
@@ -121,9 +83,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 .badge-amber{background:rgba(255,176,32,0.15);color:var(--amber);}
 .buyer-spent{font-family:'DM Mono',monospace;font-size:12px;color:var(--green);}
 
-/* ── SHOWS ── */
 .show-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px;}
-.show-card:hover{border-color:rgba(255,176,32,0.25);}
 .show-card-top{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .show-date-wrap{display:flex;align-items:baseline;gap:6px;}
 .show-date-big{font-family:'Abril Fatface',serif;font-size:26px;color:var(--amber);line-height:1;}
@@ -137,12 +97,12 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 .show-stat-num{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;}
 .show-stat-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
 .cap-bar{height:4px;background:var(--border);border-radius:2px;margin-top:10px;}
-.cap-fill{height:4px;border-radius:2px;background:var(--amber);transition:width 0.4s;}
+.cap-fill{height:4px;border-radius:2px;background:var(--amber);}
 .show-card-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 
-/* ── EMAIL BLAST ── */
+/* EMAIL BLAST */
 .blast-section{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px;}
-.blast-head{padding:14px 16px;border-bottom:1px solid var(--border);}
+.blast-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .blast-head-title{font-family:'Abril Fatface',serif;font-size:16px;}
 .blast-head-sub{font-size:11px;color:var(--muted);margin-top:2px;}
 .blast-body-inner{padding:16px;}
@@ -155,15 +115,21 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 .preview-subject{font-family:'Abril Fatface',serif;font-size:15px;color:var(--text);margin-bottom:8px;}
 .preview-text{font-size:12px;color:var(--muted);line-height:1.6;white-space:pre-wrap;}
 
-/* ── FORM ── */
+/* SETTINGS BANNER */
+.setup-banner{background:rgba(255,176,32,0.08);border:1px solid rgba(255,176,32,0.25);border-radius:6px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.setup-banner-text{flex:1;font-size:13px;color:var(--text);}
+.setup-banner-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* FORM */
 .form-group{margin-bottom:13px;}
 .form-label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
 .form-input,.form-select,.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 13px;border-radius:4px;font-size:13px;font-family:'Rubik',sans-serif;outline:none;transition:border-color 0.15s;-webkit-appearance:none;}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--amber);}
 .form-textarea{height:90px;resize:vertical;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-hint{font-size:10px;color:var(--muted);margin-top:4px;}
 
-/* ── MODAL ── */
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity 0.2s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal{background:var(--card);border:1px solid var(--border);border-radius:12px 12px 0 0;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(40px);transition:transform 0.25s;}
@@ -175,20 +141,21 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 .modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;position:sticky;bottom:0;background:var(--card);}
 .modal-footer .btn{flex:1;text-align:center;padding:12px;}
 
-/* ── TOAST ── */
+/* SENDING OVERLAY */
+.sending-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.sending-overlay.open{opacity:1;pointer-events:all;}
+.sending-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--amber);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.sending-text{font-family:'Abril Fatface',serif;font-size:20px;color:var(--text);}
+.sending-sub{font-size:13px;color:var(--muted);}
+
 .toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--green);color:var(--green);padding:10px 20px;border-radius:24px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.error{border-color:var(--red);color:var(--red);}
 
-/* ── EMPTY ── */
 .empty{text-align:center;padding:40px 20px;color:var(--muted);}
 .empty-icon{font-size:32px;margin-bottom:10px;}
 .empty-text{font-size:13px;}
-
-/* ── FAB ── */
-.fab-row{display:flex;gap:8px;margin-bottom:16px;}
-.fab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:6px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);font-family:'Rubik',sans-serif;transition:all 0.15s;}
-.fab.amber{background:rgba(255,176,32,0.1);border-color:rgba(255,176,32,0.3);color:var(--amber);}
-.fab.blue{background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.3);color:var(--blue);}
 
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
@@ -196,18 +163,15 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <span class="brand">Oliver CRM</span>
-  </div>
-  <div class="topbar-actions" id="topbar-actions">
+  <span class="brand">Oliver CRM</span>
+  <div class="topbar-actions">
+    <button class="btn-icon" id="settings-btn" title="Email Settings">⚙️</button>
     <button class="btn btn-outline btn-sm" id="add-show-btn">+ Show</button>
     <button class="btn btn-amber btn-sm" id="add-buyer-btn">+ Buyer</button>
   </div>
 </div>
 
-<!-- CONTENT -->
 <div class="content">
 
   <!-- DASHBOARD -->
@@ -230,13 +194,18 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 
   <!-- AUDIENCE -->
   <div class="page" id="page-audience">
-    <div class="search-row">
+    <div class="audience-toolbar">
       <input class="search-input" type="text" id="buyer-search" placeholder="Search name or email..."/>
       <select class="filter-sel" id="buyer-filter">
         <option value="all">All</option>
         <option value="repeat">Repeat</option>
         <option value="new">New</option>
       </select>
+      <div class="csv-actions">
+        <button class="btn-icon" id="export-csv-btn" title="Export to CSV">⬇️</button>
+        <button class="btn-icon" id="import-csv-btn" title="Import from CSV">⬆️</button>
+        <input type="file" id="csv-file-input" accept=".csv" style="display:none"/>
+      </div>
     </div>
     <div id="buyer-list"></div>
   </div>
@@ -248,8 +217,11 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
 
   <!-- EMAIL BLAST -->
   <div class="page" id="page-blast">
+    <div id="emailjs-banner"></div>
     <div class="blast-section">
-      <div class="blast-head"><div class="blast-head-title">Compose Blast</div><div class="blast-head-sub">Send to your audience</div></div>
+      <div class="blast-head">
+        <div><div class="blast-head-title">Compose Blast</div><div class="blast-head-sub">Send to your audience</div></div>
+      </div>
       <div class="blast-body-inner">
         <div class="form-group">
           <div class="form-label">Send To</div>
@@ -259,18 +231,17 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
         <div class="form-group"><label class="form-label">Subject</label><input class="form-input" id="blast-subject" type="text" placeholder="Casey Rocket is coming to STL!"/></div>
         <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" id="blast-body" placeholder="Hey [first name],&#10;&#10;Just wanted to let you know..."></textarea></div>
         <div class="preview-box">
-          <div class="preview-from">From: Chris Oliver &lt;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="12717a607b6152667d627a7d7e7d756b3c717d7f">[email&#160;protected]</a>&gt;</div>
+          <div class="preview-from" id="preview-from">From: Chris Oliver</div>
           <div class="preview-subject" id="preview-subject">Your subject will appear here</div>
           <div class="preview-text" id="preview-body">Your message will appear here as you type...</div>
         </div>
-        <button class="btn btn-amber" id="send-blast-btn" style="width:100%;text-align:center;padding:13px;margin-top:14px;">Send Email Blast</button>
+        <button class="btn btn-amber" id="send-blast-btn" style="width:100%;text-align:center;padding:13px;margin-top:14px;">🚀 Send Email Blast</button>
       </div>
     </div>
   </div>
 
 </div>
 
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <button class="bnav-item active" data-page="dashboard"><span class="bnav-icon">📊</span><span class="bnav-label">Dashboard</span></button>
   <button class="bnav-item" data-page="audience"><span class="bnav-icon">👥</span><span class="bnav-label">Audience</span></button>
@@ -321,17 +292,70 @@ body{background:var(--bg);color:var(--text);font-family:'Rubik',sans-serif;font-
   </div>
 </div>
 
+<!-- EMAILJS SETTINGS MODAL -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">⚙️ Email Settings</div><button class="modal-close" data-close="settings-modal">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">Connect your EmailJS account to send real email blasts. Free at <strong style="color:var(--text)">emailjs.com</strong> (200 emails/month).</p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:16px;font-size:12px;color:var(--muted);line-height:1.8;">
+        <strong style="color:var(--amber);">Setup steps:</strong><br/>
+        1. Go to emailjs.com → Sign up free<br/>
+        2. Add Email Service → Connect Gmail<br/>
+        3. Create Email Template with variables:<br/>
+        &nbsp;&nbsp;&nbsp;<code style="color:var(--text)">{{to_email}}</code>, <code style="color:var(--text)">{{to_name}}</code>, <code style="color:var(--text)">{{subject}}</code>, <code style="color:var(--text)">{{message}}</code>, <code style="color:var(--text)">{{from_name}}</code><br/>
+        4. Copy your keys below
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Name (shows as sender)</label>
+        <input class="form-input" id="ej-from-name" type="text" placeholder="Chris Oliver"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Email</label>
+        <input class="form-input" id="ej-from-email" type="email" placeholder="chris@tophology.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">EmailJS Public Key</label>
+        <input class="form-input" id="ej-public-key" type="text" placeholder="your_public_key"/>
+        <div class="form-hint">Found under Account → API Keys</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Service ID</label>
+        <input class="form-input" id="ej-service-id" type="text" placeholder="service_xxxxxxx"/>
+        <div class="form-hint">Found under Email Services</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Template ID</label>
+        <input class="form-input" id="ej-template-id" type="text" placeholder="template_xxxxxxx"/>
+        <div class="form-hint">Found under Email Templates</div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" data-close="settings-modal">Cancel</button><button class="btn btn-amber" id="save-settings-btn">Save Settings</button></div>
+  </div>
+</div>
+
+<!-- SENDING OVERLAY -->
+<div class="sending-overlay" id="sending-overlay">
+  <div class="sending-spinner"></div>
+  <div class="sending-text">Sending Blast...</div>
+  <div class="sending-sub" id="sending-progress">Preparing emails</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── DATA ──────────────────────────────────────────────
-var shows = [
+<script>
+// ── CONFIG — filled in via Settings modal ────────────
+var ejConfig = {publicKey:'',serviceId:'',templateId:'',fromName:'Chris Oliver',fromEmail:''};
+
+// ── SEED DATA ────────────────────────────────────────
+var SEED_KEY = 'olivercrm_seeded_v2';
+var defaultShows = [
   {id:1,name:"Best of the Midwest & Beyond",date:"2025-04-25",time:"10:30 PM",venue:"St. Charles Funny Bone",price:20,capacity:200,headliners:"Casey Rocket, Bri Munnich, Alex Hayes"},
   {id:2,name:"Delta Comedy Night",date:"2025-03-08",time:"8:00 PM",venue:"The Delta STL",price:15,capacity:80,headliners:"Chris Oliver, Jim Stout"},
   {id:3,name:"Common Courtesy Live",date:"2025-02-14",time:"9:00 PM",venue:"Zanies St. Louis",price:25,capacity:120,headliners:"Eric Kuessler, Chris Oliver"},
   {id:4,name:"Streets of STL Showcase",date:"2025-01-18",time:"8:30 PM",venue:"W&P Brewing",price:10,capacity:60,headliners:"Local Showcase"},
 ];
-var buyers = [
+var defaultBuyers = [
   {id:1,first:"Marcus",last:"Williams",email:"marcus.w@gmail.com",phone:"314-555-0101",shows:[1,2,3],tickets:[2,1,2],amounts:[40,15,50],notes:"Front row regular",color:"#ff3b1f"},
   {id:2,first:"Destiny",last:"Johnson",email:"destiny.j@yahoo.com",phone:"314-555-0202",shows:[1,3],tickets:[2,2],amounts:[40,50],notes:"",color:"#3b82f6"},
   {id:3,first:"Ray",last:"Delgado",email:"ray.d@hotmail.com",phone:"618-555-0303",shows:[2,4],tickets:[1,1],amounts:[15,10],notes:"Came from IL",color:"#22c55e"},
@@ -341,9 +365,7 @@ var buyers = [
   {id:7,first:"Brandon",last:"Lee",email:"b.lee@gmail.com",phone:"314-555-0707",shows:[2],tickets:[2],amounts:[30],notes:"",color:"#06b6d4"},
   {id:8,first:"Simone",last:"Davis",email:"simone.d@gmail.com",phone:"314-555-0808",shows:[1,4],tickets:[1,1],amounts:[20,10],notes:"Found via IG",color:"#a78bfa"},
 ];
-var nextBuyerId=9, nextShowId=5;
-var selectedRecipients=new Set(['all']);
-var activities=[
+var defaultActivities = [
   {text:'<strong>Alicia Torres</strong> purchased 1 ticket to Best of the Midwest',time:'2h ago',dot:'#22c55e'},
   {text:'<strong>Marcus Williams</strong> bought 2 tickets — Common Courtesy Live',time:'1d ago',dot:'#22c55e'},
   {text:'New show <strong>Best of the Midwest & Beyond</strong> created',time:'2d ago',dot:'#3b82f6'},
@@ -351,48 +373,67 @@ var activities=[
   {text:'Email blast sent to <strong>8 recipients</strong>',time:'1wk ago',dot:'#e879f9'},
 ];
 
-// ── LOCALSTORAGE ──────────────────────────────────────
-var SEED_DONE_KEY = 'olivercrm_seeded_v1';
+var shows, buyers, activities, nextBuyerId, nextShowId;
+var selectedRecipients = new Set(['all']);
 
+// ── LOCALSTORAGE ─────────────────────────────────────
 function saveData(){
-  try {
+  try{
     localStorage.setItem('olivercrm_shows', JSON.stringify(shows));
     localStorage.setItem('olivercrm_buyers', JSON.stringify(buyers));
     localStorage.setItem('olivercrm_activities', JSON.stringify(activities));
     localStorage.setItem('olivercrm_nextBuyerId', nextBuyerId);
     localStorage.setItem('olivercrm_nextShowId', nextShowId);
-    localStorage.setItem(SEED_DONE_KEY, '1');
-  } catch(e) {}
+    localStorage.setItem(SEED_KEY, '1');
+  }catch(e){}
 }
-
 function loadData(){
-  try {
-    // Only load from storage if we've saved before — otherwise use sample data
-    if(!localStorage.getItem(SEED_DONE_KEY)) return;
-    var s = localStorage.getItem('olivercrm_shows');
-    var b = localStorage.getItem('olivercrm_buyers');
-    var a = localStorage.getItem('olivercrm_activities');
-    if(s) shows = JSON.parse(s);
-    if(b) buyers = JSON.parse(b);
-    if(a) activities = JSON.parse(a);
-    nextBuyerId = parseInt(localStorage.getItem('olivercrm_nextBuyerId'))||nextBuyerId;
-    nextShowId = parseInt(localStorage.getItem('olivercrm_nextShowId'))||nextShowId;
-  } catch(e) {}
+  try{
+    if(!localStorage.getItem(SEED_KEY)){
+      shows = defaultShows.slice(); buyers = defaultBuyers.slice();
+      activities = defaultActivities.slice(); nextBuyerId = 9; nextShowId = 5;
+      return;
+    }
+    shows = JSON.parse(localStorage.getItem('olivercrm_shows')) || defaultShows.slice();
+    buyers = JSON.parse(localStorage.getItem('olivercrm_buyers')) || defaultBuyers.slice();
+    activities = JSON.parse(localStorage.getItem('olivercrm_activities')) || defaultActivities.slice();
+    nextBuyerId = parseInt(localStorage.getItem('olivercrm_nextBuyerId')) || 9;
+    nextShowId = parseInt(localStorage.getItem('olivercrm_nextShowId')) || 5;
+  }catch(e){
+    shows=defaultShows.slice();buyers=defaultBuyers.slice();activities=defaultActivities.slice();nextBuyerId=9;nextShowId=5;
+  }
+}
+function saveConfig(){
+  try{localStorage.setItem('olivercrm_config', JSON.stringify(ejConfig));}catch(e){}
+}
+function loadConfig(){
+  try{
+    var c = localStorage.getItem('olivercrm_config');
+    if(c) ejConfig = JSON.parse(c);
+    if(ejConfig.publicKey) emailjs.init(ejConfig.publicKey);
+  }catch(e){}
 }
 
-// ── HELPERS ───────────────────────────────────────────
+// ── HELPERS ──────────────────────────────────────────
 function totalTickets(b){return b.tickets.reduce(function(a,c){return a+c;},0);}
 function totalSpent(b){return b.amounts.reduce(function(a,c){return a+c;},0);}
 function isRepeat(b){return b.shows.length>=2;}
 function showById(id){return shows.find(function(s){return s.id===id;});}
 function formatDate(d){var p=d.split('-');var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[parseInt(p[1])-1]+' '+parseInt(p[2]);}
-function getInitials(b){return (b.first[0]+(b.last[0]||'')).toUpperCase();}
+function getInitials(b){return(b.first[0]+(b.last[0]||'')).toUpperCase();}
 function avatar(b){return '<div class="buyer-avatar" style="background:'+b.color+'">'+getInitials(b)+'</div>';}
+function isEmailJSReady(){return ejConfig.publicKey&&ejConfig.serviceId&&ejConfig.templateId&&ejConfig.fromEmail;}
 
-// ── TOAST ─────────────────────────────────────────────
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+// ── TOAST ────────────────────────────────────────────
+function showToast(msg, isError){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(isError?' error':'');
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
 
-// ── NAVIGATION ────────────────────────────────────────
+// ── NAV ──────────────────────────────────────────────
 document.querySelectorAll('.bnav-item').forEach(function(item){
   item.addEventListener('click',function(){
     var page=this.getAttribute('data-page');
@@ -407,7 +448,7 @@ document.querySelectorAll('.bnav-item').forEach(function(item){
   });
 });
 
-// ── MODALS ────────────────────────────────────────────
+// ── MODALS ───────────────────────────────────────────
 document.getElementById('add-buyer-btn').addEventListener('click',function(){
   var sel=document.getElementById('b-show');
   sel.innerHTML='<option value="">-- Select show --</option>';
@@ -417,6 +458,14 @@ document.getElementById('add-buyer-btn').addEventListener('click',function(){
 document.getElementById('add-show-btn').addEventListener('click',function(){
   document.getElementById('show-modal').classList.add('open');
 });
+document.getElementById('settings-btn').addEventListener('click',function(){
+  document.getElementById('ej-public-key').value = ejConfig.publicKey||'';
+  document.getElementById('ej-service-id').value = ejConfig.serviceId||'';
+  document.getElementById('ej-template-id').value = ejConfig.templateId||'';
+  document.getElementById('ej-from-name').value = ejConfig.fromName||'';
+  document.getElementById('ej-from-email').value = ejConfig.fromEmail||'';
+  document.getElementById('settings-modal').classList.add('open');
+});
 document.querySelectorAll('[data-close]').forEach(function(el){
   el.addEventListener('click',function(){document.getElementById(this.getAttribute('data-close')).classList.remove('open');});
 });
@@ -424,45 +473,111 @@ document.querySelectorAll('.modal-overlay').forEach(function(o){
   o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 });
 
-// ── SAVE BUYER ────────────────────────────────────────
+// ── SAVE SETTINGS ────────────────────────────────────
+document.getElementById('save-settings-btn').addEventListener('click',function(){
+  ejConfig.publicKey = document.getElementById('ej-public-key').value.trim();
+  ejConfig.serviceId = document.getElementById('ej-service-id').value.trim();
+  ejConfig.templateId = document.getElementById('ej-template-id').value.trim();
+  ejConfig.fromName = document.getElementById('ej-from-name').value.trim()||'Chris Oliver';
+  ejConfig.fromEmail = document.getElementById('ej-from-email').value.trim();
+  if(ejConfig.publicKey) emailjs.init(ejConfig.publicKey);
+  saveConfig();
+  document.getElementById('settings-modal').classList.remove('open');
+  showToast('✓ Email settings saved');
+  if(document.getElementById('page-blast').classList.contains('active')) renderBlast();
+  document.getElementById('preview-from').textContent = 'From: '+ejConfig.fromName+(ejConfig.fromEmail?' <'+ejConfig.fromEmail+'>':'');
+});
+
+// ── SAVE BUYER ───────────────────────────────────────
 document.getElementById('save-buyer-btn').addEventListener('click',function(){
   var first=document.getElementById('b-first').value.trim();
   var last=document.getElementById('b-last').value.trim();
   var email=document.getElementById('b-email').value.trim();
-  if(!first||!email){showToast('Name and email required');return;}
+  if(!first||!email){showToast('Name and email required',true);return;}
   var sid=parseInt(document.getElementById('b-show').value)||null;
   var tix=parseInt(document.getElementById('b-tickets').value)||1;
   var amt=parseFloat(document.getElementById('b-amount').value)||0;
   var colors=['#ff3b1f','#3b82f6','#22c55e','#e879f9','#ffb020','#f97316','#06b6d4','#a78bfa'];
   buyers.push({id:nextBuyerId++,first:first,last:last,email:email,phone:document.getElementById('b-phone').value.trim(),shows:sid?[sid]:[],tickets:sid?[tix]:[],amounts:sid?[amt]:[],notes:document.getElementById('b-notes').value.trim(),color:colors[buyers.length%colors.length]});
   activities.unshift({text:'<strong>'+first+' '+last+'</strong> added to audience',time:'Just now',dot:'#22c55e'});
+  saveData();
   document.getElementById('buyer-modal').classList.remove('open');
   ['b-first','b-last','b-email','b-phone','b-notes'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('b-tickets').value='1';document.getElementById('b-amount').value='20';
-  saveData();
   showToast('✓ '+first+' '+last+' added');
   renderDashboard();
   if(document.getElementById('page-audience').classList.contains('active'))renderAudience();
 });
 
-// ── SAVE SHOW ─────────────────────────────────────────
+// ── SAVE SHOW ────────────────────────────────────────
 document.getElementById('save-show-btn').addEventListener('click',function(){
   var name=document.getElementById('s-name').value.trim();
   var date=document.getElementById('s-date').value;
   var venue=document.getElementById('s-venue').value.trim();
-  if(!name||!date||!venue){showToast('Name, date and venue required');return;}
+  if(!name||!date||!venue){showToast('Name, date and venue required',true);return;}
   shows.unshift({id:nextShowId++,name:name,date:date,time:document.getElementById('s-time').value||'TBD',venue:venue,price:parseFloat(document.getElementById('s-price').value)||0,capacity:parseInt(document.getElementById('s-cap').value)||100,headliners:document.getElementById('s-headliner').value.trim()});
   activities.unshift({text:'New show <strong>'+name+'</strong> added',time:'Just now',dot:'#3b82f6'});
+  saveData();
   document.getElementById('show-modal').classList.remove('open');
   ['s-name','s-date','s-time','s-venue','s-headliner'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('s-price').value='20';document.getElementById('s-cap').value='100';
-  saveData();
   showToast('✓ Show added');
   renderDashboard();
   if(document.getElementById('page-shows').classList.contains('active'))renderShows();
 });
 
-// ── DASHBOARD ─────────────────────────────────────────
+// ── CSV EXPORT ───────────────────────────────────────
+document.getElementById('export-csv-btn').addEventListener('click',function(){
+  if(!buyers.length){showToast('No buyers to export',true);return;}
+  var rows = [['First Name','Last Name','Email','Phone','Shows Attended','Total Tickets','Total Spent ($)','Notes']];
+  buyers.forEach(function(b){
+    var showNames = b.shows.map(function(sid){var s=showById(sid);return s?s.name:'';}).join(' | ');
+    rows.push([b.first,b.last,b.email,b.phone,showNames,totalTickets(b),totalSpent(b),b.notes||'']);
+  });
+  var csv = rows.map(function(r){
+    return r.map(function(cell){return '"'+(String(cell).replace(/"/g,'""'))+'"';}).join(',');
+  }).join('\n');
+  var blob = new Blob([csv],{type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href=url; a.download='oliver-crm-buyers-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('✓ Exported '+buyers.length+' buyers');
+});
+
+// ── CSV IMPORT ───────────────────────────────────────
+document.getElementById('import-csv-btn').addEventListener('click',function(){
+  document.getElementById('csv-file-input').click();
+});
+document.getElementById('csv-file-input').addEventListener('change',function(e){
+  var file=e.target.files[0]; if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var lines=ev.target.result.split('\n').filter(function(l){return l.trim();});
+    if(lines.length<2){showToast('CSV appears empty',true);return;}
+    var added=0;
+    var colors=['#ff3b1f','#3b82f6','#22c55e','#e879f9','#ffb020','#f97316','#06b6d4','#a78bfa'];
+    for(var i=1;i<lines.length;i++){
+      var cols=lines[i].split(',').map(function(c){return c.replace(/^"|"$/g,'').replace(/""/g,'"').trim();});
+      if(!cols[0]||!cols[2]) continue;
+      var exists=buyers.find(function(b){return b.email===cols[2];});
+      if(exists) continue;
+      buyers.push({id:nextBuyerId++,first:cols[0]||'',last:cols[1]||'',email:cols[2]||'',phone:cols[3]||'',shows:[],tickets:[],amounts:[],notes:cols[7]||'',color:colors[buyers.length%colors.length]});
+      added++;
+    }
+    if(added>0){
+      activities.unshift({text:'Imported <strong>'+added+' buyers</strong> from CSV',time:'Just now',dot:'#3b82f6'});
+      saveData(); renderAudience(); renderDashboard();
+      showToast('✓ Imported '+added+' new buyers');
+    } else {
+      showToast('No new buyers found (duplicates skipped)',false);
+    }
+    e.target.value='';
+  };
+  reader.readAsText(file);
+});
+
+// ── DASHBOARD ────────────────────────────────────────
 function renderDashboard(){
   document.getElementById('stat-buyers').textContent=buyers.length;
   document.getElementById('stat-shows').textContent=shows.length;
@@ -477,7 +592,7 @@ function renderDashboard(){
   }).join('');
 }
 
-// ── AUDIENCE ──────────────────────────────────────────
+// ── AUDIENCE ─────────────────────────────────────────
 function renderAudience(){
   var search=(document.getElementById('buyer-search').value||'').toLowerCase();
   var filter=document.getElementById('buyer-filter').value;
@@ -499,15 +614,14 @@ function renderAudience(){
     btn.addEventListener('click',function(){
       var id=parseInt(this.getAttribute('data-del-buyer'));
       buyers=buyers.filter(function(b){return b.id!==id;});
-      saveData();
-      showToast('Buyer removed');renderAudience();renderDashboard();
+      saveData(); showToast('Buyer removed'); renderAudience(); renderDashboard();
     });
   });
 }
 document.getElementById('buyer-search').addEventListener('input',function(){if(document.getElementById('page-audience').classList.contains('active'))renderAudience();});
 document.getElementById('buyer-filter').addEventListener('change',function(){if(document.getElementById('page-audience').classList.contains('active'))renderAudience();});
 
-// ── SHOWS ─────────────────────────────────────────────
+// ── SHOWS ────────────────────────────────────────────
 function renderShows(){
   var el=document.getElementById('shows-list');
   if(!shows.length){el.innerHTML='<div class="empty"><div class="empty-icon">🎤</div><div class="empty-text">No shows yet</div></div>';return;}
@@ -528,13 +642,12 @@ function renderShows(){
     btn.addEventListener('click',function(){
       var id=parseInt(this.getAttribute('data-del-show'));
       shows=shows.filter(function(s){return s.id!==id;});
-      saveData();
-      showToast('Show removed');renderShows();renderDashboard();
+      saveData(); showToast('Show removed'); renderShows(); renderDashboard();
     });
   });
 }
 
-// ── EMAIL BLAST ───────────────────────────────────────
+// ── EMAIL BLAST ──────────────────────────────────────
 function getRecipients(){
   if(selectedRecipients.has('all'))return buyers;
   var result=new Set();
@@ -547,6 +660,16 @@ function getRecipients(){
 }
 
 function renderBlast(){
+  // Banner
+  var banner = document.getElementById('emailjs-banner');
+  if(!isEmailJSReady()){
+    banner.innerHTML='<div class="setup-banner"><div>⚠️</div><div class="setup-banner-text"><strong>Email not connected yet</strong><div class="setup-banner-sub">Tap ⚙️ in the top right to connect your EmailJS account and enable real sending.</div></div><button class="btn btn-amber btn-sm" id="open-settings-from-banner">Set Up</button></div>';
+    var b=document.getElementById('open-settings-from-banner');
+    if(b) b.addEventListener('click',function(){document.getElementById('settings-btn').click();});
+  } else {
+    banner.innerHTML='<div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:6px;padding:10px 16px;margin-bottom:14px;font-size:12px;color:var(--green);">✓ Email connected — blasts will send from <strong>'+ejConfig.fromEmail+'</strong></div>';
+  }
+  // Chips
   var opts=[{key:'all',label:'All Buyers'},{key:'repeat',label:'Repeat'},{key:'new',label:'First-Timers'}];
   shows.slice(0,4).forEach(function(s){opts.push({key:'show_'+s.id,label:s.name.split(' ').slice(0,3).join(' ')});});
   document.getElementById('recipient-chips').innerHTML=opts.map(function(o){
@@ -562,28 +685,75 @@ function renderBlast(){
   });
   var n=getRecipients().length;
   document.getElementById('recipient-count').textContent='→ Sending to '+n+' recipient'+(n!==1?'s':'');
+  document.getElementById('preview-from').textContent='From: '+ejConfig.fromName+(ejConfig.fromEmail?' <'+ejConfig.fromEmail+'>':'');
 }
 
 document.getElementById('blast-subject').addEventListener('input',function(){document.getElementById('preview-subject').textContent=this.value||'Your subject will appear here';});
 document.getElementById('blast-body').addEventListener('input',function(){document.getElementById('preview-body').textContent=this.value||'Your message will appear here as you type...';});
-document.getElementById('send-blast-btn').addEventListener('click',function(){
+
+document.getElementById('send-blast-btn').addEventListener('click',async function(){
   var subj=document.getElementById('blast-subject').value.trim();
   var body=document.getElementById('blast-body').value.trim();
-  if(!subj||!body){showToast('Subject and message required');return;}
-  var n=getRecipients().length;
-  activities.unshift({text:'Email blast <strong>"'+subj.slice(0,28)+(subj.length>28?'...':'')+'"</strong> sent to '+n+' recipients',time:'Just now',dot:'#e879f9'});
+  if(!subj||!body){showToast('Subject and message required',true);return;}
+  var recipients=getRecipients();
+  if(!recipients.length){showToast('No recipients selected',true);return;}
+
+  if(!isEmailJSReady()){
+    // Log only — no real sending
+    activities.unshift({text:'[DEMO] Blast <strong>"'+subj.slice(0,28)+'"</strong> logged for '+recipients.length+' recipients',time:'Just now',dot:'#e879f9'});
+    saveData();
+    showToast('✓ Logged (connect email to send for real)');
+    document.getElementById('blast-subject').value='';
+    document.getElementById('blast-body').value='';
+    document.getElementById('preview-subject').textContent='Your subject will appear here';
+    document.getElementById('preview-body').textContent='Your message will appear here as you type...';
+    selectedRecipients.clear();selectedRecipients.add('all');
+    renderBlast();
+    return;
+  }
+
+  // Real EmailJS sending
+  var overlay=document.getElementById('sending-overlay');
+  var progress=document.getElementById('sending-progress');
+  overlay.classList.add('open');
+  var sent=0, failed=0;
+
+  for(var i=0;i<recipients.length;i++){
+    var r=recipients[i];
+    progress.textContent='Sending '+r.first+' '+r.last+' ('+( i+1)+' of '+recipients.length+')';
+    var personalBody = body.replace(/\[first name\]/gi, r.first).replace(/\[last name\]/gi, r.last).replace(/\[name\]/gi, r.first+' '+r.last);
+    try{
+      await emailjs.send(ejConfig.serviceId, ejConfig.templateId, {
+        to_email: r.email,
+        to_name: r.first+' '+r.last,
+        from_name: ejConfig.fromName,
+        subject: subj,
+        message: personalBody
+      });
+      sent++;
+    }catch(err){
+      failed++;
+    }
+    // Small delay to avoid rate limiting
+    if(i < recipients.length-1) await new Promise(function(res){setTimeout(res,300);});
+  }
+
+  overlay.classList.remove('open');
+  activities.unshift({text:'Email blast <strong>"'+subj.slice(0,28)+'"</strong> sent to '+sent+' recipients'+(failed?' ('+failed+' failed)':''),time:'Just now',dot:'#e879f9'});
   saveData();
-  showToast('✓ Blast sent to '+n+' recipients');
+  showToast(failed?'Sent '+sent+', '+failed+' failed':'✓ Blast sent to all '+sent+' recipients', failed>0);
   document.getElementById('blast-subject').value='';
   document.getElementById('blast-body').value='';
   document.getElementById('preview-subject').textContent='Your subject will appear here';
   document.getElementById('preview-body').textContent='Your message will appear here as you type...';
   selectedRecipients.clear();selectedRecipients.add('all');
   renderBlast();
+  renderDashboard();
 });
 
-// ── INIT ──────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────
 loadData();
+loadConfig();
 renderDashboard();
 </script>
 </body>
